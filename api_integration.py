@@ -1,52 +1,32 @@
 # #import Flask object from flask package
-# # from flask import Flask, jsonify
-# import requests
+from flask import Flask, jsonify
+import requests
 
 # #create flask application instance
-# # app = Flask(__name__)
+app = Flask(__name__)
 # #API endpoint
-# BASE_URL = "https://cybqa.pesapal.com/pesapalv3"
-
-# #GET request to the API
-# response = requests.get(BASE_URL)
-# #raise exception when not a 2xx response
-# response.raise_for_status()
-# data = response.json()
-
-# def api_intergration():
-#     if ( response.status_code != 204 and
-#         response.headers["content-type"].strip().startswith("application/json")
-#         ):
-#         try:
-#             return data
-#         except ValueError:
-#             print("not found")
+BASE_URL = "https://cybqa.pesapal.com/pesapalv3"
 
 # #create our decorator(converts a py function into a flask view function)
 # # view function converts the function return value into an HTTP response to be displayed by the HTTP client
-# @app.route("", methods=["GET"])
-# def api_testing():
-#     #JWT authntication
-    
-#     #data from the api
-#     data = request.get_json()
-#     #response in json
-#     return jsonify(data), 200
-
-
-#run the application
-#export work with unix
-#set FLASK_APP=api_integration.py
-#run the app in the development mode
-#set FLASK_ENV=development
-#run the application using flask run
-
-import requests
-import json
-
-response = requests.get("https://cybqa.pesapal.com/pesapalv3", 
-                        headers={"Accept": "application/json"})
-
-json_object = json.loads(response)
-print(json_object)
-# print(f"Status Code: {response.status_code}, Content: {response.json()}")
+@app.route("/", methods=["GET"])
+def api_testing():
+    try:
+        #JWT authntication
+        
+        #data from the api
+        response = requests.get(BASE_URL)
+        response.raise_for_status()
+        
+        data = response.json()
+        iframe_url = data.get("iframe_url")
+        
+        response_data = {
+            "iframe_url": iframe_url
+        }
+        #response in json
+        return jsonify(response_data), 200
+    except requests.exceptions.RequestException as e:
+        return jsonify({"error": str(e)}), 500
+if __name__ == '__main__':
+    app.run(host='localhost', port=5000)
