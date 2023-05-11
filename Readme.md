@@ -36,15 +36,17 @@ This is a sample API implementation that consumes Pesapal API and provides an en
     NB: ensure your virtual environment is active 
     and you execute the following commands from the working directory
     ## Windows OS
-    >>set FLASK_APP=api_integration.py 
-    >>$env:FLASK_ENV="development"
-    >>set FLASK_ENV=development
-    >> $env:FLASK_ENV="development"
-    >> flask run 
+    >>1. set FLASK_APP=api_integration.py 
+    >>2. $env:FLASK_ENV="development"
+    >>3. set FLASK_ENV=development
+    >>4.  $env:FLASK_ENV="development"
+    >>5. flask run 
     ## UNIX
-    >>export FLASK_APP=api_integration.py
-    >>export FLASK_ENV=development
-    >>flask run 
+    >>1. export FLASK_APP=api_integration.py
+    >>2. export FLASK_ENV=development
+    >>3. flask run 
+    
+    
 
    ![run_server_expected_output](https://github.com/edwinnab/pesapal-api-integration/assets/50041140/f0b0aa80-878b-4160-9d39-b38e00b71813)
     
@@ -52,6 +54,8 @@ This is a sample API implementation that consumes Pesapal API and provides an en
 2. The API will be accessible at http://localhost:5000/.
 3. To access the Pesapal iframe URL, send a GET request to the API endpoint or click the urls on display on your browser
 >> The response will be in JSON format and contain the Pesapal iframe URLs.
+
+
     
     ![iframe_urls](https://github.com/edwinnab/pesapal-api-integration/assets/50041140/4f68c4c1-c84f-4b3a-80ca-4bf448d21319)
 
@@ -61,9 +65,9 @@ This is a sample API implementation that consumes Pesapal API and provides an en
 ![postman_api_response](https://github.com/edwinnab/pesapal-api-integration/assets/50041140/1c58f256-6b4c-4996-977f-293dc7a07d38)
 
 ## JWT Authentication
-** JWT (JSON Web Token) authentication is implemented to secure the API endpoint.
-** To access the API, you need to include a JWT token in the Authorization header of the request as a bearer token.
-** The token is generated using a secret key and is validated before granting access to the endpoint.
-** To customize the authentication logic, modify the jwt_authentication_required decorator in the api_integration.py file.
+**1.  JWT (JSON Web Token) authentication is implemented to secure the API endpoint.
+**2.  To access the API, you need to include a JWT token in the Authorization header of the request as a bearer token.
+**3.  The token is generated using a secret key and is validated before granting access to the endpoint.
+**4.  To customize the authentication logic, modify the jwt_authentication_required decorator in the api_integration.py file.
 
 
