@@ -20,10 +20,9 @@ def jwt_authentication_required(f):
         token = request.headers.get('Authorization')
         if not token:
             return jsonify({"error": "JWT token is missing"}), 401
-
+        
         try:
             payload = jwt.decode(token, app.config['SECRET_KEY'], algorithms=["HS256"])
-            
             
         except jwt.ExpiredSignatureError:
             return jsonify({"error": "JWT token has expired"}), 401
@@ -58,9 +57,7 @@ def get_pesapal_iframe_url():
         #response in json
         return jsonify(response_data), 200
         # Return the HTML doc response as the API response
-        # return Response(response.content, content_type='text/html')
-        
-        
+        # return Response(response.content, content_type='text/html')        
     except requests.exceptions.RequestException as e:
         #handle request errors
         return jsonify({"error": str(e)}), 500
