@@ -55,14 +55,12 @@ This is a sample API implementation that consumes Pesapal API and provides an en
 3. To access the Pesapal iframe URL, send a GET request to the API endpoint or click the urls on display on your browser
 >> The response will be in JSON format and contain the Pesapal iframe URLs.
 
+   ![iframes_urls_response](https://github.com/edwinnab/pesapal-api-integration/assets/50041140/55156f35-1820-41c2-868e-ccf8cfcc97f9)
 
-    
-    ![iframe_urls](https://github.com/edwinnab/pesapal-api-integration/assets/50041140/4f68c4c1-c84f-4b3a-80ca-4bf448d21319)
-
-
+ 
 >>check the endpoint response on postman to be sure what kind of data you should expect as the response
    
-![postman_api_response](https://github.com/edwinnab/pesapal-api-integration/assets/50041140/1c58f256-6b4c-4996-977f-293dc7a07d38)
+   ![postman_api_response](https://github.com/edwinnab/pesapal-api-integration/assets/50041140/1c58f256-6b4c-4996-977f-293dc7a07d38)
 
 ## JWT Authentication
 >>1.  JWT (JSON Web Token) authentication is implemented to secure the API endpoint.
