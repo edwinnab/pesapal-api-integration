@@ -65,9 +65,9 @@ This is a sample API implementation that consumes Pesapal API and provides an en
 ![postman_api_response](https://github.com/edwinnab/pesapal-api-integration/assets/50041140/1c58f256-6b4c-4996-977f-293dc7a07d38)
 
 ## JWT Authentication
-**1.  JWT (JSON Web Token) authentication is implemented to secure the API endpoint.
-**2.  To access the API, you need to include a JWT token in the Authorization header of the request as a bearer token.
-**3.  The token is generated using a secret key and is validated before granting access to the endpoint.
-**4.  To customize the authentication logic, modify the jwt_authentication_required decorator in the api_integration.py file.
+>>1.  JWT (JSON Web Token) authentication is implemented to secure the API endpoint.
+>>2.  To access the API, you need to include a JWT token in the Authorization header of the request as a bearer token.
+>>3.  The token is generated using a secret key and is validated before granting access to the endpoint.
+>>4.  To customize the authentication logic, modify the jwt_authentication_required decorator in the api_integration.py file.
 
 
