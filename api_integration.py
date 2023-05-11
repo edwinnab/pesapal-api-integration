@@ -1,7 +1,8 @@
 # #import Flask object from flask package
 from flask import Flask, jsonify
 import requests
-import jsonpickle
+import re
+from bs4 import BeautifulSoup
 
 # #create flask application instance
 app = Flask(__name__)
@@ -18,14 +19,23 @@ def api_testing():
         #data from the api
         response = requests.get(BASE_URL)
         response.raise_for_status()
-        data = list(enumerate(response))
+        #parse the HTML response using BeautifulSoup
+        soup = BeautifulSoup(response.content, "html.parser")
+        #find the container element that wraps the iframes
+        script_tags = soup.find_all("script")
         
-        # iframe_url = data.get("iframe_url")
         
-        # response_data = {
-        #     "iframe_url": iframe_url
-        # }
+        iframe_urls = [script['src'] for script in script_tags if script.get("src")]
+        
+        response_data = {
+            "iframe_urls": iframe_urls
+        }
         #response in json
-        return jsonpickle.encode(data)
+        return jsonify(response_data), 200
     except requests.exceptions.RequestException as e:
+        #handle request errors
         return jsonify({"error": str(e)}), 500
+    
+    
+if __name__ == '__main__':
+    app.run(host='localhost', port=5000)
