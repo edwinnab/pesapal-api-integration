@@ -46,15 +46,19 @@ This is a sample API implementation that consumes Pesapal API and provides an en
     >>export FLASK_ENV=development
     >>flask run 
 
-    run_server_expected_output.png
+   ![run_server_expected_output](https://github.com/edwinnab/pesapal-api-integration/assets/50041140/f0b0aa80-878b-4160-9d39-b38e00b71813)
+    
 
 2. The API will be accessible at http://localhost:5000/.
 3. To access the Pesapal iframe URL, send a GET request to the API endpoint or click the urls on display on your browser
 >> The response will be in JSON format and contain the Pesapal iframe URLs.
-    iframe_urls.png
+    
+    ![iframe_urls](https://github.com/edwinnab/pesapal-api-integration/assets/50041140/4f68c4c1-c84f-4b3a-80ca-4bf448d21319)
+
 
 >>check the endpoint response on postman to be sure what kind of data you should expect as the response
-    postman_api_response.png
+   
+![postman_api_response](https://github.com/edwinnab/pesapal-api-integration/assets/50041140/1c58f256-6b4c-4996-977f-293dc7a07d38)
 
 ## JWT Authentication
 ** JWT (JSON Web Token) authentication is implemented to secure the API endpoint.
