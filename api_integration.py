@@ -1,6 +1,7 @@
 # #import Flask object from flask package
 from flask import Flask, jsonify
 import requests
+import jsonpickle
 
 # #create flask application instance
 app = Flask(__name__)
@@ -17,16 +18,14 @@ def api_testing():
         #data from the api
         response = requests.get(BASE_URL)
         response.raise_for_status()
+        data = list(enumerate(response))
         
-        data = response.json()
-        iframe_url = data.get("iframe_url")
+        # iframe_url = data.get("iframe_url")
         
-        response_data = {
-            "iframe_url": iframe_url
-        }
+        # response_data = {
+        #     "iframe_url": iframe_url
+        # }
         #response in json
-        return jsonify(response_data), 200
+        return jsonpickle.encode(data)
     except requests.exceptions.RequestException as e:
         return jsonify({"error": str(e)}), 500
-if __name__ == '__main__':
-    app.run(host='localhost', port=5000)
