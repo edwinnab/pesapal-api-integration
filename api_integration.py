@@ -72,7 +72,7 @@ def jwt_authentication_required(f):
 #generate the access_token 
 #endpoint https://cybqa.pesapal.com/pesapalv3/api/Auth/RequestToken
 
-api_url = "https://cybqa.pesapal.com/pesapalv3/api/Auth/RequestToken"
+api_url = f"{BASE_URL}/api/Auth/RequestToken"
 
 consumer_key = "qkio1BGGYAXTu2JOfm7XSXNruoZsrqEW"
 consumer_secret = "osGQ364R49cXKeOYSpaOnT++rHs="
@@ -99,3 +99,36 @@ def generate_access_token():
         print("Failed to generate access token. Status code:", response.status_code)
         
 generate_access_token()
+
+#POST Request 
+# register an IPN (Instant Payment Notification) URL 
+# endpoint https://cybqa.pesapal.com/pesapalv3/api/URLSetup/RegisterIPN
+api_url = f"{BASE_URL}/api/URLSetup/RegisterIPN"
+bearer_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3VzZXJkYXRhIjoiZWQ2MTkwMGYtZGNiMy00NjM2LWIxNGUtY2U1MGQwYzk2M2I1IiwidWlkIjoicWtpbzFCR0dZQVhUdTJKT2ZtN1hTWE5ydW9ac3JxRVciLCJuYmYiOjE2ODM4NzYyMjksImV4cCI6MTY4Mzg3OTgyOSwiaWF0IjoxNjgzODc2MjI5LCJpc3MiOiJodHRwOi8vY3licWEucGVzYXBhbC5jb20vIiwiYXVkIjoiaHR0cDovL2N5YnFhLnBlc2FwYWwuY29tLyJ9.MB7rLpOvWCHOq3WfPKydR2LoRCirmQFjUuBKhjLNnP8"
+url = input("Enter url")
+notification_type="GET"
+def register_ipn_url(url, notification_type):
+    # Request Headers
+    headers = {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {bearer_token}"
+    }
+    
+    # Request Payload
+    payload = {
+        "id": url,
+        "ipn_notification_type": notification_type
+    }
+    
+    # Make the POST request to register IPN URL
+    response = requests.post(api_url, json=payload, headers=headers)
+    
+    if response.status_code == 200:
+        print("IPN URL registered successfully!")
+    else:
+        print("Failed to register IPN URL. Status code:", response.status_code) 
+
+# Example usage
+register_ipn_url(url, notification_type)
+
