@@ -93,6 +93,7 @@ def generate_access_token():
     response = requests.post(api_url, json=payload, headers=headers)
     
     if response.status_code == 200:
+        global access_token
         access_token = response.json()["token"]
         print("Access Token", access_token)
     else:
@@ -104,7 +105,8 @@ generate_access_token()
 # register an IPN (Instant Payment Notification) URL 
 # endpoint https://cybqa.pesapal.com/pesapalv3/api/URLSetup/RegisterIPN
 api_url = f"{BASE_URL}/api/URLSetup/RegisterIPN"
-bearer_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3VzZXJkYXRhIjoiZWQ2MTkwMGYtZGNiMy00NjM2LWIxNGUtY2U1MGQwYzk2M2I1IiwidWlkIjoicWtpbzFCR0dZQVhUdTJKT2ZtN1hTWE5ydW9ac3JxRVciLCJuYmYiOjE2ODM4NzYyMjksImV4cCI6MTY4Mzg3OTgyOSwiaWF0IjoxNjgzODc2MjI5LCJpc3MiOiJodHRwOi8vY3licWEucGVzYXBhbC5jb20vIiwiYXVkIjoiaHR0cDovL2N5YnFhLnBlc2FwYWwuY29tLyJ9.MB7rLpOvWCHOq3WfPKydR2LoRCirmQFjUuBKhjLNnP8"
+bearer_token = f"{access_token}"
+print(bearer_token)
 url = input("Enter url")
 notification_type="GET"
 def register_ipn_url(url, notification_type):
@@ -126,8 +128,10 @@ def register_ipn_url(url, notification_type):
     
     if response.status_code == 200:
         print("IPN URL registered successfully!")
+        print("Response:", response.json())
     else:
         print("Failed to register IPN URL. Status code:", response.status_code) 
+        print("Error", response.json())
 
 # Example usage
 register_ipn_url(url, notification_type)
