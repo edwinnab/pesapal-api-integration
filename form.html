@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Submit Order Request</title>
+</head>
+<body>
+    <h2>Submit Order Request</h2>
+    <form method="POST" action="/submit_order">
+        <label for="id">Order ID:</label>
+        <input type="text" name="id" required><br><br>
+        
+        <label for="currency">Currency:</label>
+        <input type="text" name="currency" required><br><br>
+        
+        <label for="amount">Amount:</label>
+        <input type="number" name="amount" required><br><br>
+        
+        <label for="description">Description:</label>
+        <input type="text" name="description" required><br><br>
+        
+        <label for="callback_url">Callback URL:</label>
+        <input type="url" name="callback_url" required><br><br>
+        
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>

@@ -1,82 +1,21 @@
 #import necessary modules
 from flask import Flask, jsonify, request
 import requests
-from bs4 import BeautifulSoup
 from functools import wraps
 import jwt
-
-
+import json
 
 app = Flask(__name__)
-# Change to a secure secret key
-app.config['SECRET_KEY'] = 'your-secret-key'
-
-
-
 BASE_URL = "https://cybqa.pesapal.com/pesapalv3"
-
-# JWT authentication decorator
-def jwt_authentication_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        token = request.headers.get('Authorization')
-        if not token:
-            return jsonify({"error": "JWT token is missing"}), 401
-        
-        try:
-            payload = jwt.decode(token, app.config['SECRET_KEY'], algorithms=["HS256"])
-            
-        except jwt.ExpiredSignatureError:
-            return jsonify({"error": "JWT token has expired"}), 401
-        except jwt.InvalidTokenError:
-            return jsonify({"error": "Invalid JWT token"}), 401
-        
-        return f(*args, **kwargs)
-    return decorated_function
-
-# API route with JWT authentication
-# @app.route("/", methods=["GET"])
-# def get_pesapal_iframe_url():
-#     try:
-#         #data from the api
-#         response = requests.get(BASE_URL)
-#         response.raise_for_status()
-        
-#         #parse the HTML response using BeautifulSoup
-#         soup = BeautifulSoup(response.content, "html.parser")
-        
-#         # #find all the scripts withing the body
-#         script_tags = soup.find_all("script")
-#         #check if the script is found
-#         if script_tags:
-#             #extract the iframe urls from the script tag
-#             iframe_urls = [script['src'] for script in script_tags if script.get("src")]
-#             #construct the response to be in json 
-#             #response returns URLS of the static assests as the reponse has no <iframe> tags
-#             response_data = {
-#                 "iframe_urls": iframe_urls
-#             }
-#             #response in json
-#             return jsonify(response_data), 200
-#         else:
-#             return jsonify({"error": "Iframe URL not found"}), 500
-    
-#         # Return the HTML doc response as the API response
-#         # return Response(response.content, content_type='text/html')        
-#     except requests.exceptions.RequestException as e:
-#         #handle request errors
-#         return jsonify({"error": str(e)}), 500
 
 # POST Request 
 # Authentication endpoint 
 #generate the access_token 
-#endpoint https://cybqa.pesapal.com/pesapalv3/api/Auth/RequestToken
-
+#endpoint /api/Auth/RequestToken
 api_url = f"{BASE_URL}/api/Auth/RequestToken"
 
 consumer_key = "qkio1BGGYAXTu2JOfm7XSXNruoZsrqEW"
 consumer_secret = "osGQ364R49cXKeOYSpaOnT++rHs="
-
 def generate_access_token():
     #Request Headers
     headers = {
@@ -95,26 +34,25 @@ def generate_access_token():
     if response.status_code == 200:
         global access_token
         access_token = response.json()["token"]
-        print("Access Token", access_token)
+        print("Access Token: ")
+        print(access_token, "\n\n")
     else:
-        print("Failed to generate access token. Status code:", response.status_code)
-        
+        print("Failed to generate access token. Status code:", response.status_code)     
 generate_access_token()
 
 #POST Request 
 # register an IPN (Instant Payment Notification) URL 
-# endpoint https://cybqa.pesapal.com/pesapalv3/api/URLSetup/RegisterIPN
+# endpoint /api/URLSetup/RegisterIPN
 api_url = f"{BASE_URL}/api/URLSetup/RegisterIPN"
-bearer_token = f"{access_token}"
-print(bearer_token)
-url = input("Enter url")
-notification_type="GET"
-def register_ipn_url(url, notification_type):
+def register_ipn_url():
+    
+    url = input("Enter your IPN URL: ")
+    notification_type = "GET"
     # Request Headers
     headers = {
         "Accept": "application/json",
         "Content-Type": "application/json",
-        "Authorization": f"Bearer {bearer_token}"
+        "Authorization": f"Bearer {access_token}"
     }
     
     # Request Payload
@@ -127,12 +65,114 @@ def register_ipn_url(url, notification_type):
     response = requests.post(api_url, json=payload, headers=headers)
     
     if response.status_code == 200:
-        print("IPN URL registered successfully!")
-        print("Response:", response.json())
+        print("\n\n", "IPN URL registered successfully!", "\n\n")
+        print("Response: ", "\n\n\n", response.json())
     else:
         print("Failed to register IPN URL. Status code:", response.status_code) 
-        print("Error", response.json())
+        print("Error: ", "\n\n\n", response.json())
+register_ipn_url()
 
-# Example usage
-register_ipn_url(url, notification_type)
+#GET Request
+# fetch all registered IPN URLs for a Pesapal merchant account
+# endpoint  /api/URLSetup/GetIpnList
+api_url = f"{BASE_URL}/api/URLSetup/GetIpnList"
+def get_registered_ipns():
+    # Request Headers
+    headers = {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {access_token}"
+    }
+    
+    # Make the GET request to fetch registered IPN URLs
+    response = requests.get(api_url, headers=headers)
+    
+    if response.status_code == 200:
+        ipn_list = response.json()
+        print("\n\n", "Registered IPN URLs:")
+        for ipn in ipn_list:
+            print(ipn)
+    else:
+        print("\n\n", "Failed to fetch registered IPN URLs. Status code:", "\n\n\n", response.status_code)
+get_registered_ipns()
+
+#POST Request
+#Submit Order Request Endpoint 
+#endpoint  /api/Transactions/SubmitOrderRequest
+api_url = f"{BASE_URL}/api/Transactions/SubmitOrderRequest"
+def submit_order_request():
+    # Request Headers
+    headers = {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {access_token}"
+    }
+    
+    # Request Payload
+    #Todo create a form later 
+    payload = {
+        "id": "AA1122-3345ZZ",
+        "currency": "KES",
+        "amount": 100.00,
+        "description": "Payment description goes here",
+        "callback_url": "https://www.myapplication.com/response-page",
+        "redirect_mode": "",
+        "notification_id": "2f1e48ef-de37-4a49-9cd5-deacf4174c39",
+        "branch": "Store Name - HQ",
+        "billing_address": {
+            "email_address": "john.doe@example.com",
+            "phone_number": "0723xxxxxx",
+            "country_code": "KE",
+            "first_name": "John",
+            "middle_name": "",
+            "last_name": "Doe",
+            "line_1": "Pesapal Limited",
+            "line_2": "",
+            "city": "",
+            "state": "",
+            "postal_code": "",
+            "zip_code": ""
+        }
+    }
+    
+    # Make the POST request to submit order request
+    response = requests.post(api_url, json=payload, headers=headers)
+    
+    if response.status_code == 200:
+        response_data = response.json()
+        if "redirect_url" in response_data:
+            payment_redirect_url = response_data["redirect_url"]
+            json_data = json.dumps({"payment_redirect_url": payment_redirect_url}, indent=4)
+            print("\n\n", "Payment redirect URL (JSON): ")
+            print(json_data)
+        else:
+            print("\n\n", "Redirect URL not found in the response.")
+    else:
+        print("Failed to submit order request. Status code:", response.status_code)
+        print("Error:", response.json())    
+submit_order_request()
+
+# Change to a secure secret key
+app.config['SECRET_KEY'] = 'your-secret-key'
+# JWT authentication decorator
+def jwt_authentication_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        token = request.headers.get('Authorization')
+        if not token:
+            return jsonify({"error": "JWT token is missing"}), 401
+        
+        try:
+            payload = jwt.decode(token, app.config['SECRET_KEY'], algorithms=["HS256"])
+            
+        except jwt.ExpiredSignatureError:
+            return jsonify({"error": "JWT token has expired"}), 401
+        except jwt.InvalidTokenError:
+            return jsonify({"error": "Invalid JWT token"}), 401
+        
+        return f(*args, **kwargs)
+    return decorated_function
+jwt_authentication_required(register_ipn_url)
+
+
 
