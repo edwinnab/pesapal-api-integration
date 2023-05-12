@@ -1,10 +1,10 @@
 #import necessary modules
 from flask import Flask, jsonify, request
 import requests
-import re
 from bs4 import BeautifulSoup
 from functools import wraps
 import jwt
+
 
 
 app = Flask(__name__)
@@ -43,19 +43,22 @@ def get_pesapal_iframe_url():
         #parse the HTML response using BeautifulSoup
         soup = BeautifulSoup(response.content, "html.parser")
         
-        #find all the scripts withing the body
+        # #find all the scripts withing the body
         script_tags = soup.find_all("script")
-        
-        #extract the iframe urls from the script tag
-        iframe_urls = [script['src'] for script in script_tags if script.get("src")]
-        
-        #construct the response to be in json 
-        #response returns URLS of the static assests as the reponse has no <iframe> tags
-        response_data = {
-            "iframe_urls": iframe_urls
-        }
-        #response in json
-        return jsonify(response_data), 200
+        #check if the script is found
+        if script_tags:
+            #extract the iframe urls from the script tag
+            iframe_urls = [script['src'] for script in script_tags if script.get("src")]
+            #construct the response to be in json 
+            #response returns URLS of the static assests as the reponse has no <iframe> tags
+            response_data = {
+                "iframe_urls": iframe_urls
+            }
+            #response in json
+            return jsonify(response_data), 200
+        else:
+            return jsonify({"error": "Iframe URL not found"}), 500
+    
         # Return the HTML doc response as the API response
         # return Response(response.content, content_type='text/html')        
     except requests.exceptions.RequestException as e:
