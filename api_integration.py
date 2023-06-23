@@ -112,7 +112,7 @@ def submit_order_request():
     # Request Payload
     #Todo create a form later 
     payload = {
-        "id": "AA1122-3345ZZ",
+        "id": "AA1122-3345ZU",
         "currency": "KES",
         "amount": 100.00,
         "description": "Payment description goes here",
