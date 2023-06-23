@@ -17,6 +17,7 @@ api_url = f"{BASE_URL}/api/Auth/RequestToken"
 consumer_key = "qkio1BGGYAXTu2JOfm7XSXNruoZsrqEW"
 consumer_secret = "osGQ364R49cXKeOYSpaOnT++rHs="
 def generate_access_token():
+    
     #Request Headers
     headers = {
     "Accept": "application/json",
@@ -118,7 +119,7 @@ def submit_order_request():
         "callback_url": "https://www.myapplication.com/response-page",
         "redirect_mode": "",
         "notification_id": "2f1e48ef-de37-4a49-9cd5-deacf4174c39",
-        "branch": "Store Name - HQ",
+        "branch": "Store Name - DUKA",
         "billing_address": {
             "email_address": "john.doe@example.com",
             "phone_number": "0723xxxxxx",
