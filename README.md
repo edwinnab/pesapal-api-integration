@@ -23,7 +23,7 @@ git clone git@github.com:edwinnab/pesapal-api-integration.git
 ```
 # Step1: Change directory to the working directory
 ```
-cd 
+cd pesapal-api-integration
 ```
 # Step2: Create a virtual environment from the working directory 
 ## Windows 
