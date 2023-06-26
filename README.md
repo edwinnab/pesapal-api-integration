@@ -7,13 +7,17 @@
 # Step0: Clone the repo 
 ## Windows HTTP
 ```
-git clone 
+git clone https://github.com/edwinnab/pesapal-api-integration.git
 ```
 ## Windows SSH
 ```
 git clone 
 ```
-## Unix
+## Unix HTTP
+```
+git clone https://github.com/edwinnab/pesapal-api-integration.git
+```
+## Unix SSH
 ```
 git clone 
 ```
